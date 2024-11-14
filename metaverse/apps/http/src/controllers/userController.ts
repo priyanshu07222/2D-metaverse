@@ -124,3 +124,25 @@ export const otherUserMetadataController = async (req: Request, res: Response) =
         }))
     })
 }
+
+export const getAllElement = async(req: Request, res: Response) => {
+    const elements = await client.element.findMany()
+
+    res.json({elements: elements.map(e => ({
+        id: e.id,
+        imageUrl: e.imageUrl,
+        width: e.width,
+        height: e.height,
+        static: e.static
+    }))})
+}
+
+export const getAllAvatar = async(req: Request, res: Response) => {
+    const avatars = await client.element.findMany()
+
+    res.json({avatars: avatars.map(e => ({
+        id: e.id,
+        imageUrl: e.imageUrl,
+        name: e.name
+    }))})
+}
