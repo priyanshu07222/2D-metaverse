@@ -1,3 +1,3 @@
-import { PrismaClient } from "@prisma/client";
+import x from "@prisma/client"
 
-export default new PrismaClient();
+export default new x.PrismaClient();
