@@ -1,9 +1,9 @@
 import { Request, Response } from "express";
-import { signinSchema, signupSchema, updateMetadataSchema } from "../types";
+import { signinSchema, signupSchema, updateMetadataSchema } from "../types/index.js";
 import client from '@repo/db/client'
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
-import { JWT_SECRET } from "../config";
+import { JWT_SECRET } from "../config.js";
 
 export const signup = async (req: Request, res: Response): Promise<any> => {
     const parsedData = signupSchema.safeParse(req.body)
@@ -84,14 +84,14 @@ export const signin = async (req: Request, res: Response): Promise<any> => {
 
 export const metadataController = async (req: Request, res: Response) => {
     const parsedData = updateMetadataSchema.safeParse(req.body)
-    if(!parsedData){
+    if (!parsedData) {
         res.status(400).json({
             message: "Validation failed"
         })
     }
 
     await client.user.update({
-        where:{
+        where: {
             id: req.userId
         },
         data: {
@@ -110,8 +110,8 @@ export const otherUserMetadataController = async (req: Request, res: Response) =
 
     const metadata = await client.user.findMany({
         where: {
-            id: {in: userIdAsArray}
-        }, select:{
+            id: { in: userIdAsArray }
+        }, select: {
             avatar: true,
             id: true
         }
@@ -125,24 +125,28 @@ export const otherUserMetadataController = async (req: Request, res: Response) =
     })
 }
 
-export const getAllElement = async(req: Request, res: Response) => {
+export const getAllElement = async (req: Request, res: Response) => {
     const elements = await client.element.findMany()
 
-    res.json({elements: elements.map(e => ({
-        id: e.id,
-        imageUrl: e.imageUrl,
-        width: e.width,
-        height: e.height,
-        static: e.static
-    }))})
+    res.json({
+        elements: elements.map(e => ({
+            id: e.id,
+            imageUrl: e.imageUrl,
+            width: e.width,
+            height: e.height,
+            static: e.static
+        }))
+    })
 }
 
-export const getAllAvatar = async(req: Request, res: Response) => {
-    const avatars = await client.element.findMany()
+export const getAllAvatar = async (req: Request, res: Response) => {
+    const avatars = await client.avatar.findMany()
 
-    res.json({avatars: avatars.map(e => ({
-        id: e.id,
-        imageUrl: e.imageUrl,
-        name: e.name
-    }))})
+    res.json({
+        avatars: avatars.map(e => ({
+            id: e.id,
+            imageUrl: e.imageUrl,
+            name: e.name
+        }))
+    })
 }

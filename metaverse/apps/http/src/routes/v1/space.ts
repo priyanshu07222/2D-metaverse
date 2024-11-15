@@ -1,6 +1,6 @@
 import { Router } from "express";
-import { userMiddleware } from "../../middleware/user";
-import { addElementToSpace, createSpace, deleteElement, deleteSpace, getAllSpace, getSpecificSpace } from "../../controllers/spaceController";
+import { userMiddleware } from "../../middleware/user.js";
+import { addElementToSpace, createSpace, deleteElement, deleteSpace, getAllSpace, getSpecificSpace } from "../../controllers/spaceController.js";
 
 export const spaceRouter = Router()
 

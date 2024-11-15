@@ -1,6 +1,6 @@
 import { Router } from "express";
-import { metadataController, otherUserMetadataController } from "../../controllers/userController";
-import { userMiddleware } from "../../middleware/user";
+import { metadataController, otherUserMetadataController } from "../../controllers/userController.js";
+import { userMiddleware } from "../../middleware/user.js";
 
 export const userRouter = Router()
 

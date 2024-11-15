@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { createAvatarSchema, createElementSchema, createMapSchema, updateElementSchema } from "../types";
+import { createAvatarSchema, createElementSchema, createMapSchema, updateElementSchema } from "../types/";
 import client from '@repo/db/client'
 
 
@@ -27,7 +27,7 @@ export const createElement = async (req: Request, res: Response) => {
 export const updateElement = async (req: Request, res: Response) => {
     const parsedData = updateElementSchema.safeParse(req.body)
     if (!parsedData.success) {
-        res.status(400).json({message: "Validation failed"})
+        res.status(400).json({ message: "Validation failed" })
         return
     }
 
@@ -35,7 +35,7 @@ export const updateElement = async (req: Request, res: Response) => {
         where: {
             id: req.params.elementId
         },
-        data:{
+        data: {
             imageUrl: parsedData.data.imageUrl
         }
     })
@@ -48,7 +48,7 @@ export const updateElement = async (req: Request, res: Response) => {
 export const createAvatar = async (req: Request, res: Response) => {
     const parsedData = createAvatarSchema.safeParse(req.body)
     if (!parsedData.success) {
-        res.status(400).json({message: "Validation failed"})
+        res.status(400).json({ message: "Validation failed" })
         return
     }
 
@@ -67,12 +67,12 @@ export const createAvatar = async (req: Request, res: Response) => {
 export const createMap = async (req: Request, res: Response) => {
     const parsedData = createMapSchema.safeParse(req.body)
     if (!parsedData.success) {
-        res.status(400).json({message: "Validation failed"})
+        res.status(400).json({ message: "Validation failed" })
         return
     }
 
     const map = await client.map.create({
-        data:{
+        data: {
             name: parsedData.data.name,
             width: parseInt(parsedData.data.dimensions.split("x")[0]),
             height: parseInt(parsedData.data.dimensions.split("x")[1]),

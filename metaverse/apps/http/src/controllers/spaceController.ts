@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { AddElementSchema, createSpaceSchema, deleteElementSchema } from "../types";
+import { AddElementSchema, createSpaceSchema, deleteElementSchema } from "../types/index.js";
 import client from '@repo/db/client'
 
 export const createSpace = async (req: Request, res: Response) => {
