@@ -6,15 +6,29 @@ import jwt from 'jsonwebtoken'
 import { JWT_SECRET } from "../config";
 
 export const signup = async (req: Request, res: Response): Promise<any> => {
-    const parsedData = signupSchema.safeParse(req.body)
+    const parsedData = await signupSchema.safeParse(req.body)
+    console.log(parsedData.data?.username, parsedData.data?.type, parsedData.data?.password, parsedData.success, "singup")
 
     if (!parsedData.success) {
         return res.status(400).json({ message: "Validation failed" })
     }
+    console.log("1")
 
     const hashedPassword = await bcrypt.hash(parsedData.data.password, 10)
 
     try {
+        console.log("2")
+        const userAlreadyExist = await client.user.findFirst({
+            where: {
+                username: parsedData.data.username
+            }
+        })
+
+        if (userAlreadyExist) {
+            res.status(400).json({ message: "user already exist" })
+            return;
+        }
+        
         const user = await client.user.create({
             data: {
                 username: parsedData.data.username,
@@ -23,11 +37,12 @@ export const signup = async (req: Request, res: Response): Promise<any> => {
             }
         })
 
+        console.log("3")
         res.json({
             userId: user.id
         })
     } catch (error) {
-        res.status(400).json({
+        res.status(401).json({
             message: "User already exists"
         })
 
@@ -38,6 +53,7 @@ export const signup = async (req: Request, res: Response): Promise<any> => {
 
 export const signin = async (req: Request, res: Response): Promise<any> => {
     const parsedData = signinSchema.safeParse(req.body)
+    console.log(parsedData.data?.username, parsedData.data?.password, "singin")
 
     if (!parsedData.success) {
         return res.status(403).json({ message: "Validation failed" })

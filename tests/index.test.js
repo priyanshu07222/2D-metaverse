@@ -1,7 +1,5 @@
 const { default: axios2 } = require("axios");
 
-
-
 const BACKEND_URL = "http://localhost:3000"
 const WS_URL = "ws://localhost:3001"
 
@@ -44,7 +42,7 @@ const axios = {
 describe("Authentication", () => {
     test('User is able to sign up only once', async () => {
         const username = "Priyanshu" + Math.random();
-        const password = "123456"
+        const password = "123456789"
 
         const response = await axios.post(`${BACKEND_URL}/api/v1/signup`, {
             username,
