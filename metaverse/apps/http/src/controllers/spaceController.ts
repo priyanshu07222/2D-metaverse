@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { AddElementSchema, createSpaceSchema, deleteElementSchema } from "../types/index.js";
+import { AddElementSchema, createSpaceSchema, deleteElementSchema } from "../types";
 import client from '@repo/db/client'
 
 export const createSpace = async (req: Request, res: Response) => {
@@ -70,7 +70,7 @@ export const createSpace = async (req: Request, res: Response) => {
 export const deleteElement = async (req: Request, res: Response) => {
     const parsedData = deleteElementSchema.safeParse(req.body)
     if (!parsedData.success) {
-        res.status(400).json({message: "Validation failed"})
+        res.status(400).json({ message: "Validation failed" })
         return
     }
 
@@ -78,42 +78,42 @@ export const deleteElement = async (req: Request, res: Response) => {
         where: {
             id: parsedData.data.id
         },
-        include:{
+        include: {
             space: true
         }
     })
 
-    if(!spaceElement?.space.createrId || spaceElement.space.createrId !== req.userId){
-        res.status(403).json({message:"Unauthorized"})
+    if (!spaceElement?.space.createrId || spaceElement.space.createrId !== req.userId) {
+        res.status(403).json({ message: "Unauthorized" })
         return
     }
 
     await client.spaceElements.delete({
-        where:{
+        where: {
             id: parsedData.data.id
         }
     })
 
-    res.json({message: "Element deleted"})
+    res.json({ message: "Element deleted" })
 }
 
 export const deleteSpace = async (req: Request, res: Response) => {
     const space = await client.space.findUnique({
-        where:{
+        where: {
             id: req.params.spaceId
-        }, select:{
+        }, select: {
             createrId: true
         }
     })
 
-    if(!space){
-        res.status(400).json({message: "Space not found"})
+    if (!space) {
+        res.status(400).json({ message: "Space not found" })
         return
     }
 
     if (space.createrId !== req.userId) {
         console.log("code should reach here")
-        res.status(403).json({message: "Unauthorized"})
+        res.status(403).json({ message: "Unauthorized" })
         return
     }
 
@@ -122,11 +122,11 @@ export const deleteSpace = async (req: Request, res: Response) => {
             id: req.params.spaceId
         }
     })
-    res.json({message: "Space deleted"})
+    res.json({ message: "Space deleted" })
 }
 
 
-export const getAllSpace = async (req: Request, res:Response) => {
+export const getAllSpace = async (req: Request, res: Response) => {
     const spaces = await client.space.findMany({
         where: {
             createrId: req.userId!
@@ -144,20 +144,20 @@ export const getAllSpace = async (req: Request, res:Response) => {
 }
 
 
-export const getSpecificSpace = async(req: Request, res: Response) => {
+export const getSpecificSpace = async (req: Request, res: Response) => {
     const space = await client.space.findUnique({
         where: {
             id: req.params.spaceId
         },
         include: {
             elements: {
-                include: {element: true}
+                include: { element: true }
             }
         }
     })
 
-    if(!space){
-        res.status(400).json({message: "Space not found"})
+    if (!space) {
+        res.status(400).json({ message: "Space not found" })
         return
     }
 
@@ -180,7 +180,7 @@ export const getSpecificSpace = async(req: Request, res: Response) => {
 
 export const addElementToSpace = async (req: Request, res: Response) => {
     const parsedData = AddElementSchema.safeParse(req.body)
-    if(!parsedData){
+    if (!parsedData) {
         res.status(400).json({
             message: "Validation failed"
         })
@@ -190,18 +190,18 @@ export const addElementToSpace = async (req: Request, res: Response) => {
         where: {
             id: parsedData.data?.spaceId,
             createrId: req.body.userId
-        }, select:{
+        }, select: {
             width: true,
             height: true
         }
     })
 
-    if(req.body.x < 0 || req.body.y < 0 || req.body.x > space?.width! || req.body.y > space?.height!){
-        res.status(400).json({message: "Point is outside of the boundary"})
+    if (req.body.x < 0 || req.body.y < 0 || req.body.x > space?.width! || req.body.y > space?.height!) {
+        res.status(400).json({ message: "Point is outside of the boundary" })
         return
     }
 
-    if(!space){
+    if (!space) {
         res.status(400).json({
             message: "Space not found"
         })
@@ -217,5 +217,5 @@ export const addElementToSpace = async (req: Request, res: Response) => {
         }
     })
 
-    res.json({message: "Element added"})
+    res.json({ message: "Element added" })
 }

@@ -1,6 +1,6 @@
 import { Router } from "express";
-import { adminMiddleware } from "../../middleware/admin.js";
-import { createAvatar, createElement, createMap, updateElement } from "../../controllers/adminController.js";
+import { adminMiddleware } from "../../middleware/admin";
+import { createAvatar, createElement, createMap, updateElement } from "../../controllers/adminController";
 
 export const adminRouter = Router()
 

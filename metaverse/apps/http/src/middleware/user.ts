@@ -2,7 +2,7 @@
 
 import { NextFunction, Request, Response } from "express"
 import jwt from "jsonwebtoken";
-import { JWT_SECRET } from "../config.js";
+import { JWT_SECRET } from "../config";
 
 export const userMiddleware = (req: Request, res: Response, next: NextFunction) => {
     const header = req.headers.authorization // [Bearer, token]

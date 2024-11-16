@@ -1,9 +1,9 @@
 import { Request, Response } from "express";
-import { signinSchema, signupSchema, updateMetadataSchema } from "../types/index.js";
+import { signinSchema, signupSchema, updateMetadataSchema } from "../types";
 import client from '@repo/db/client'
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
-import { JWT_SECRET } from "../config.js";
+import { JWT_SECRET } from "../config";
 
 export const signup = async (req: Request, res: Response): Promise<any> => {
     const parsedData = signupSchema.safeParse(req.body)

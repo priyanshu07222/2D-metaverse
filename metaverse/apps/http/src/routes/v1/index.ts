@@ -1,8 +1,8 @@
 import { Router } from "express";
-import { userRouter } from "./user.js";
-import { spaceRouter } from "./space.js";
-import { adminRouter } from "./admin.js";
-import { getAllAvatar, getAllElement, signin, signup } from "../../controllers/userController.js";
+import { userRouter } from "./user";
+import { spaceRouter } from "./space";
+import { adminRouter } from "./admin";
+import { getAllAvatar, getAllElement, signin, signup } from "../../controllers/userController";
 
 export const router = Router()
 

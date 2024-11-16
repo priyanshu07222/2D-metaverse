@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { createAvatarSchema, createElementSchema, createMapSchema, updateElementSchema } from "../types/";
+import { createAvatarSchema, createElementSchema, createMapSchema, updateElementSchema } from "../types";
 import client from '@repo/db/client'
 
 
