@@ -4,7 +4,7 @@ import client from '@repo/db/client'
 
 
 export const createElement = async (req: Request, res: Response) => {
-    console.log("yes sir")
+    // console.log("yes sir")
     const parsedData = createElementSchema.safeParse(req.body)
     if (!parsedData.success) {
         res.status(400).json({ message: "Validation failed" })
@@ -47,11 +47,13 @@ export const updateElement = async (req: Request, res: Response) => {
 }
 
 export const createAvatar = async (req: Request, res: Response) => {
+    // console.log("Avatarcreate")
     const parsedData = createAvatarSchema.safeParse(req.body)
     if (!parsedData.success) {
         res.status(400).json({ message: "Validation failed" })
         return
     }
+    // console.log("Avatarcreate 1")
 
     const avatar = await client.avatar.create({
         data: {

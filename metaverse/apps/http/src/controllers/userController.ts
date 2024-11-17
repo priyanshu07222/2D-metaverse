@@ -17,7 +17,6 @@ export const signup = async (req: Request, res: Response): Promise<any> => {
     const hashedPassword = await bcrypt.hash(parsedData.data.password, 10)
 
     try {
-        console.log("2")
         const userAlreadyExist = await client.user.findFirst({
             where: {
                 username: parsedData.data.username
@@ -28,7 +27,7 @@ export const signup = async (req: Request, res: Response): Promise<any> => {
             res.status(400).json({ message: "user already exist" })
             return;
         }
-        
+
         const user = await client.user.create({
             data: {
                 username: parsedData.data.username,
@@ -60,11 +59,13 @@ export const signin = async (req: Request, res: Response): Promise<any> => {
     }
 
     try {
+        console.log("signin", "1")
         const user = await client.user.findUnique({
             where: {
                 username: parsedData.data.username
             }
         })
+        console.log("signin", "2")
 
         if (!user) {
             res.status(403).json({
@@ -74,6 +75,7 @@ export const signin = async (req: Request, res: Response): Promise<any> => {
         }
 
         const isValid = await bcrypt.compare(parsedData.data.password, user?.password)
+        console.log("signin", "3")
 
         if (!isValid) {
             res.status(403).json({
@@ -86,6 +88,7 @@ export const signin = async (req: Request, res: Response): Promise<any> => {
             userId: user.id,
             role: user.role
         }, JWT_SECRET)
+        console.log("signin", "4c")
 
         res.json({
             token
@@ -106,23 +109,33 @@ export const metadataController = async (req: Request, res: Response) => {
         })
     }
 
-    await client.user.update({
-        where: {
-            id: req.userId
-        },
-        data: {
-            avatarId: parsedData.data?.avatarId
-        }
-    })
+    // console.log(req.userId, "userid")
+    // console.log(parsedData.data?.avatarId, "useridjhkjlhj44444")
 
-    res.json({
-        message: "Metadata updated"
-    })
+    try {
+        await client.user.update({
+            where: {
+                id: req.userId
+            },
+            data: {
+                avatarId: parsedData.data?.avatarId
+            }
+        })
+        res.json({ message: "Metadata updated" })
+    } catch (error) {
+        console.log(error)
+        res.status(400).json({
+            message: "Internal server error"
+        })
+    }
+
+
 }
 
 export const otherUserMetadataController = async (req: Request, res: Response) => {
-    const userIds = req.query.ids as string
-    const userIdAsArray = [...userIds]
+    const userIds = (req.query.ids ?? "[]") as string
+    const userIdAsArray = (userIds).slice(1, userIds?.length - 1).split(",");
+    // console.log(userIds, userIdAsArray)
 
     const metadata = await client.user.findMany({
         where: {
@@ -157,6 +170,7 @@ export const getAllElement = async (req: Request, res: Response) => {
 
 export const getAllAvatar = async (req: Request, res: Response) => {
     const avatars = await client.avatar.findMany()
+    // console.log(avatars, "avatars")
 
     res.json({
         avatars: avatars.map(e => ({

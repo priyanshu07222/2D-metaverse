@@ -14,12 +14,12 @@ export const userMiddleware = (req: Request, res: Response, next: NextFunction) 
         })
         return
     }
+    // console.log("djflkdajl"
 
     try {
         const decoded = jwt.verify(token, JWT_SECRET) as { role: string, userId: string }
 
-
-        req.userId === decoded.userId
+        req.userId = decoded.userId
         next()
     } catch (error) {
         res.status(401).json({

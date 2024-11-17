@@ -4,6 +4,6 @@ import { userMiddleware } from "../../middleware/user";
 
 export const userRouter = Router()
 
-userRouter.post('/metadeta', userMiddleware, metadataController)
+userRouter.post('/metadata', userMiddleware, metadataController)
 
 userRouter.get('/metadata/bulk', otherUserMetadataController)
