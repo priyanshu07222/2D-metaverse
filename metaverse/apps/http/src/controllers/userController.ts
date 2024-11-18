@@ -139,7 +139,7 @@ export const otherUserMetadataController = async (req: Request, res: Response) =
     })
 
     res.json({
-        avatars: metadata.map(m => ({
+        avatars: metadata.map((m: any) => ({
             userId: m.id,
             avatarId: m.avatar?.imageUrl
         }))
@@ -150,7 +150,7 @@ export const getAllElement = async (req: Request, res: Response) => {
     const elements = await client.element.findMany()
 
     res.json({
-        elements: elements.map(e => ({
+        elements: elements.map((e: any) => ({
             id: e.id,
             imageUrl: e.imageUrl,
             width: e.width,
@@ -165,7 +165,7 @@ export const getAllAvatar = async (req: Request, res: Response) => {
     // console.log(avatars, "avatars")
 
     res.json({
-        avatars: avatars.map(e => ({
+        avatars: avatars.map((e: any) => ({
             id: e.id,
             imageUrl: e.imageUrl,
             name: e.name
