@@ -1,7 +1,7 @@
 import { WebSocket } from "ws";
 import { JWT_SECRET } from "./config";
 import { RoomManager } from "./RoomManager";
-import jwt, {JwtPayload} from 'jsonwebtoken';
+import jwt, { JwtPayload } from 'jsonwebtoken';
 import client from '@repo/db/client'
 import { OutgoingMessage } from "./types";
 
@@ -28,11 +28,11 @@ export class User {
         this.x = 0;
         this.y = 0;
         this.ws = ws;
-
+        this.initHandlers()
     }
 
     initHandlers() {
-        this.ws.on("message", async(data) => {
+        this.ws.on("message", async (data) => {
             const parsedData = JSON.parse(data.toString())
             switch (parsedData.type) {
                 case "join":
@@ -40,20 +40,20 @@ export class User {
                     const token = parsedData.payload.token;
                     const userId = (jwt.verify(token, JWT_SECRET) as JwtPayload).userId
 
-                    if(!userId){
+                    if (!userId) {
                         this.ws.close()
                         return
                     }
 
                     this.userId = userId
-                    
+
                     const space = await client.space.findFirst({
-                        where:{
+                        where: {
                             id: spaceId
                         }
                     })
 
-                    if(!space){
+                    if (!space) {
                         this.ws.close();
                         return
                     }
@@ -64,19 +64,19 @@ export class User {
                     this.y = Math.floor(Math.random() * space?.height);
 
                     this.send({
-                        type:"space-joined",
-                        payload:{
+                        type: "space-joined",
+                        payload: {
                             spawn: {
                                 x: this.x,
                                 y: this.y
                             },
-                            users: RoomManager.getInstance().rooms.get(spaceId)?.filter(x => x.id !== this.id)?.map(u => ({id: u.id})) ?? []
+                            users: RoomManager.getInstance().rooms.get(spaceId)?.filter(x => x.id !== this.id)?.map(u => ({ id: u.id })) ?? []
                         }
                     })
 
                     RoomManager.getInstance().broadcast({
                         type: "user-joined",
-                        payload:{
+                        payload: {
                             userId: this.userId,
                             x: this.x,
                             y: this.y
@@ -89,13 +89,13 @@ export class User {
                     const xDisplacement = Math.abs(this.x - moveX)
                     const yDisplacement = Math.abs(this.y - moveY)
 
-                    if((xDisplacement == 1 && yDisplacement == 0) || (xDisplacement == 0 && yDisplacement ==1)){
+                    if ((xDisplacement == 1 && yDisplacement == 0) || (xDisplacement == 0 && yDisplacement == 1)) {
                         this.x = moveX;
                         this.y = moveY;
 
                         RoomManager.getInstance().broadcast({
                             type: "movement",
-                            payload:{
+                            payload: {
                                 x: this.x,
                                 y: this.y
                             }
@@ -105,7 +105,7 @@ export class User {
 
                     this.send({
                         type: "movement-rejected",
-                        payload:{
+                        payload: {
                             x: this.x,
                             y: this.y
                         }
@@ -114,17 +114,17 @@ export class User {
         })
     }
 
-    destroy(){
+    destroy() {
         RoomManager.getInstance().broadcast({
-            type:"user-left",
-            payload:{
+            type: "user-left",
+            payload: {
                 userId: this.userId
             }
         }, this, this.spaceId!);
         RoomManager.getInstance().removeUser(this, this.spaceId!)
     }
 
-    send(payload: OutgoingMessage){
+    send(payload: OutgoingMessage) {
         this.ws.send(JSON.stringify(payload))
     }
 }

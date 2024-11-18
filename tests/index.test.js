@@ -1,4 +1,6 @@
 const { default: axios2 } = require("axios");
+const { WebSocket } = require('ws');
+
 
 const BACKEND_URL = "http://localhost:3000"
 const WS_URL = "ws://localhost:3001"
@@ -824,12 +826,16 @@ describe("Websocket tests", () => {
     function waitForAndPopLatestMessage(messageArray) {
         return new Promise(resolve => {
             if (messageArray.length > 0) {
+                console.log("1111111111111111111111111111111111")
                 resolve(messageArray.shift())
+                console.log("222222222222222222222222222222222")
             } else {
                 let interval = setInterval(() => {
                     if (messageArray.length > 0) {
+                        console.log("33333333333333333")
                         resolve(messageArray.shift())
                         clearInterval(interval)
+                        console.log("44444444444444444444444444444")
                     }
                 }, 100)
             }

@@ -1,19 +1,23 @@
 {
-  "name": "ws",
+  "name": "metaverse-ws",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "src/index.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "ts-node && node src/index.js"
+    "dev": "ts-node src/index.ts"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "@repo/db": "*",
     "@types/jsonwebtoken": "^9.0.7",
-    "@types/ws": "^8.5.13",
-    "ws": "^1.0.0",
-    "@repo/db": "*"
+    "esbuild": "^0.24.0",
+    "jsonwebtoken": "^9.0.2",
+    "ws": "^8.18.0"
+  },
+  "devDependencies": {
+    "@types/ws": "^8.5.13"
   }
 }
