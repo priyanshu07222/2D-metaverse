@@ -7,12 +7,10 @@ import { JWT_SECRET } from "../config";
 
 export const signup = async (req: Request, res: Response): Promise<any> => {
     const parsedData = await signupSchema.safeParse(req.body)
-    console.log(parsedData.data?.username, parsedData.data?.type, parsedData.data?.password, parsedData.success, "singup")
 
     if (!parsedData.success) {
         return res.status(400).json({ message: "Validation failed" })
     }
-    console.log("1")
 
     const hashedPassword = await bcrypt.hash(parsedData.data.password, 10)
 
@@ -36,7 +34,6 @@ export const signup = async (req: Request, res: Response): Promise<any> => {
             }
         })
 
-        console.log("3")
         res.json({
             userId: user.id
         })
@@ -52,20 +49,17 @@ export const signup = async (req: Request, res: Response): Promise<any> => {
 
 export const signin = async (req: Request, res: Response): Promise<any> => {
     const parsedData = signinSchema.safeParse(req.body)
-    console.log(parsedData.data?.username, parsedData.data?.password, "singin")
 
     if (!parsedData.success) {
         return res.status(403).json({ message: "Validation failed" })
     }
 
     try {
-        console.log("signin", "1")
         const user = await client.user.findUnique({
             where: {
                 username: parsedData.data.username
             }
         })
-        console.log("signin", "2")
 
         if (!user) {
             res.status(403).json({
@@ -75,7 +69,6 @@ export const signin = async (req: Request, res: Response): Promise<any> => {
         }
 
         const isValid = await bcrypt.compare(parsedData.data.password, user?.password)
-        console.log("signin", "3")
 
         if (!isValid) {
             res.status(403).json({
@@ -88,7 +81,6 @@ export const signin = async (req: Request, res: Response): Promise<any> => {
             userId: user.id,
             role: user.role
         }, JWT_SECRET)
-        console.log("signin", "4c")
 
         res.json({
             token

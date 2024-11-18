@@ -47,13 +47,11 @@ export const updateElement = async (req: Request, res: Response) => {
 }
 
 export const createAvatar = async (req: Request, res: Response) => {
-    // console.log("Avatarcreate")
     const parsedData = createAvatarSchema.safeParse(req.body)
     if (!parsedData.success) {
         res.status(400).json({ message: "Validation failed" })
         return
     }
-    // console.log("Avatarcreate 1")
 
     const avatar = await client.avatar.create({
         data: {
@@ -69,10 +67,12 @@ export const createAvatar = async (req: Request, res: Response) => {
 
 export const createMap = async (req: Request, res: Response) => {
     const parsedData = createMapSchema.safeParse(req.body)
+
     if (!parsedData.success) {
         res.status(400).json({ message: "Validation failed" })
         return
     }
+
 
     const map = await client.map.create({
         data: {

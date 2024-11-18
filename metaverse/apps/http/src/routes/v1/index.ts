@@ -10,7 +10,7 @@ router.post('/signup', signup)
 
 router.post('/signin', signin)
 
-router.get('/elements', getAllElement)
+router.post('/elements', getAllElement)
 
 router.get('/avatars', getAllAvatar)
 

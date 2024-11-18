@@ -50,6 +50,7 @@ export const createSpace = async (req: Request, res: Response) => {
 
             }
         })
+        console.log("Createspace4688")
 
         await client.spaceElements.createMany({
             data: map.mapElements.map(e => ({
@@ -60,19 +61,23 @@ export const createSpace = async (req: Request, res: Response) => {
             }))
         })
 
-        return space;
+        console.log("Createspace998")
 
+
+        return space;
     })
 
-
+    res.json({ spaceId: space.id })
 }
 
 export const deleteElement = async (req: Request, res: Response) => {
     const parsedData = deleteElementSchema.safeParse(req.body)
+
     if (!parsedData.success) {
         res.status(400).json({ message: "Validation failed" })
         return
     }
+
 
     const spaceElement = await client.spaceElements.findFirst({
         where: {
@@ -83,16 +88,20 @@ export const deleteElement = async (req: Request, res: Response) => {
         }
     })
 
+
     if (!spaceElement?.space.createrId || spaceElement.space.createrId !== req.userId) {
         res.status(403).json({ message: "Unauthorized" })
         return
     }
+
 
     await client.spaceElements.delete({
         where: {
             id: parsedData.data.id
         }
     })
+    // console.log("is able to deleteedddddddddddddd")
+
 
     res.json({ message: "Element deleted" })
 }
@@ -106,16 +115,18 @@ export const deleteSpace = async (req: Request, res: Response) => {
         }
     })
 
+
     if (!space) {
         res.status(400).json({ message: "Space not found" })
         return
     }
 
+
     if (space.createrId !== req.userId) {
-        console.log("code should reach here")
         res.status(403).json({ message: "Unauthorized" })
         return
     }
+
 
     await client.space.delete({
         where: {
