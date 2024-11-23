@@ -3,6 +3,7 @@ import { BrowserRouter, createBrowserRouter, createRoutesFromElements, Route, Ro
 import { Signup } from './pages/Signup'
 import { Layout } from './Layout'
 import { Signin } from './pages/Signin'
+import { Home } from './pages/Home'
 function App() {
   // const config = {
   //   type: Phaser.AUTO,
@@ -21,6 +22,7 @@ function App() {
   const router = createBrowserRouter(
     createRoutesFromElements(
       <Route path='/' element={<Layout />} >
+        <Route path='home' element={<Home/>}/>
         <Route path='signup' element={<Signup />} />
         <Route path='signin' element={<Signin />} />
       </Route>
