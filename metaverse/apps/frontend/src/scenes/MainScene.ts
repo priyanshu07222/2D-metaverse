@@ -4,7 +4,11 @@ const mainScene = (): any => {
     let avatar: Phaser.GameObjects.Image
 
     function preload(this: Phaser.Scene) {
-        this.load.image('avatar', '/assets/avatar.png')
+        this.load.image('avatar', '/assets/cave.png')
+        this.load.image('inner', '/assets/Inner.png')
+        this.load.image('objects', '/assets/objects.png')
+        this.load.image('overworld', '/assets/Overworld.png')
+        this.load.tilemapTiledJSON('main-map', 'newTiled.json')
     }
 
     function create(this: Phaser.Scene) {
