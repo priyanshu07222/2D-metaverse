@@ -5,11 +5,11 @@ export const phaserGameConfig: Phaser.Types.Core.GameConfig = {
   type: Phaser.AUTO,
   width: 800,
   height: 600,
-  backgroundColor: '#fff',
+  backgroundColor: '#4rf',
   physics: {
     default: 'arcade',
     arcade: {
-      gravity: { x: 0, y: 300 },
+      gravity: { x: 0, y: 0 },
       debug: false,
     },
   },
