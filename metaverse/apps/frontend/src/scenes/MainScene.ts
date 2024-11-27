@@ -1,69 +1,44 @@
 import Phaser from "phaser";
 
 const mainScene = (): Phaser.Types.Scenes.CreateSceneFromObjectConfig => {
-    // Change to Sprite for animation or movement
 
     function preload(this: Phaser.Scene) {
         // Load assets
-        this.load.image('cave', '/assets/cave.png');
-        this.load.image('inner', '/assets/Inner.png');
-        this.load.image('objects', '/assets/objects.png');
-        this.load.image('overworld', '/assets/Overworld.png');
-        this.load.image('npctest', '/assets/NPC_test.png');
-        this.load.image('log', '/assets/log.png');
 
-        this.load.image('floor', 'Little_Bits_Office_Floors.png')
-        this.load.image('objects', 'Little_Bits_office_objects.png')
-        this.load.image('walls', 'Little_Bits_office_walls.png')
-        this.load.tilemapTiledJSON('office-map','/assets/officetiled')
+        this.load.image('floor', '/assets/Little_Bits_Office_Floors.png')
+        this.load.image('objects', '/assets/Little_Bits_office_objects.png')
+        this.load.image('walls', '/assets/Little_Bits_office_walls.png')
+        this.load.tilemapTiledJSON('office-map', '/assets/officetiled')
 
         this.load.spritesheet('character', '/assets/character.png', { frameWidth: 32, frameHeight: 32 });
-        this.load.tilemapTiledJSON('main-map', '/assets/newTiled');
     }
     let avatar: Phaser.Physics.Arcade.Sprite;
 
     function create(this: Phaser.Scene) {
-        // Create the tilemap
         const map = this.make.tilemap({ key: 'office-map' });
 
+
         const floorTileset = map.addTilesetImage('Little_Bits_Office_Floors', 'floor')
-        const objectsTileset = map.addTilesetImage('Little_Bits_Office_objects', 'object')
-        
-        const wallsTileset = map.addTilesetImage('Little_Bits_Office_walls', 'walls')
+        const objectsTileset = map.addTilesetImage('Little_Bits_office_objects', 'objects')
+        const wallsTileset = map.addTilesetImage('Little_Bits_office_walls', 'walls')
 
-        map.createLayer('floor', floorTileset!, 0, 0)
-        map.createLayer('walls', wallsTileset!, 0, 0)
-        map.createLayer('objects', objectsTileset!, 0, 0)
+        const floorlayer = map.createLayer('floor', floorTileset!, 0, 0)
+        const wallslayer = map.createLayer('walls', wallsTileset!, 0, 0)
+        const objectslayer = map.createLayer('object', objectsTileset!, 0, 0)
         map.createLayer('things', objectsTileset!, 0, 0)
+        // avatar.setCollidesWith(0)
 
-        // Add tilesets
-        // const overworldTileset = map.addTilesetImage('Overworld', 'overworld');
-        // const innerTileset = map.addTilesetImage('Inner', 'inner');
-        // const objectsTileset = map.addTilesetImage('objects', 'objects');
-        // const NPC_testTileset = map.addTilesetImage('NPC_test', 'npctest');
-        // const logTileset = map.addTilesetImage('log', 'log');
-        // const caveTileset = map.addTilesetImage('cave', 'cave');
-        // const characterTileset = map.addTilesetImage('character', 'character');
-
-        // Create layers
-        // const overworldLayer = map.createLayer('Tile Layer 1', overworldTileset!, 0, 0);
-        // const innerLayer = map.createLayer('Tile Layer 2', innerTileset!, 0, 0);
-        // map.createLayer('Tile Layer 2', overworldTileset!, 0, 0); //yes
-        // map.createLayer('Tile Layer 2', innerTileset!, 0, 0) //yes
-        // map.createLayer('Tile Layer 2', objectsTileset!, 0, 0)
-        // const y = map.createLayer('object', innerTileset!, 0, 0)
-        // Configure layers
-        // overworldLayer?.setCollisionByProperty({ collides: true });
-        // innerLayer?.setDepth(0);
+        wallslayer?.setCollisionByProperty({ collides: true }, true, true)
+        objectslayer?.setCollisionByProperty({ collides: true })
 
         // Add player/avatar
-        // avatar = this.physics.add.sprite(100, 100, 'character'); // Initial position (100, 100)
         avatar = this.physics.add.sprite(100, 100, 'character', 0)
         avatar.setCollideWorldBounds()
+        this.physics.add.collider(avatar, wallslayer!); // Collide with walls
+        this.physics.add.collider(avatar, objectslayer!); 
         // avatar.setCollidesWith(0)
 
         // Add collider for player and map
-        // this.physics.add.collider(avatar, overworldLayer!);
     }
 
     function update(this: Phaser.Scene) {
