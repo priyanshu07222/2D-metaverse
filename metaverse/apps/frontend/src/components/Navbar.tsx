@@ -5,7 +5,7 @@ export const Navbar = () => {
     const navigate = useNavigate()
     const token = localStorage.getItem("token")
     return (
-        <div className='flex justify-between items-center p-4 border-b'>
+        <div className='flex justify-between items-center p-4 border-b max-w-screen-2xl mx-auto'>
             <div className='font-bold text-xl'>Metaverse</div>
             <div className=''>{
                 localStorage.getItem("token") ?
