@@ -1,9 +1,37 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import Phaser from 'phaser'
 import phaserGameConfig from '../utils/phaser'
+import Websocket from 'ws'
 
 export const Home = () => {
     // const game = new Phaser.Game(phaserGameConfig)
+    const ws = new WebSocket('ws://localhost:3001');
+    ws.addEventListener('open', (event) => {
+        const data = {
+            "type": "join",
+            "payload": {
+                "spaceId": "123",
+                "token": localStorage.getItem('token')
+            }
+        }
+        ws.send(JSON.stringify(data))
+
+        
+    })
+
+    ws.addEventListener('message', (event) => {
+        console.log("Message from server",JSON.parse(event.data))
+    })
+
+    
+
+    // useEffect(() => {
+    //     
+    //     // ws.send("hello from frontend")
+    //     // ws.on('error', console.error);
+
+
+    // }, [])
 
     return (
         <div>

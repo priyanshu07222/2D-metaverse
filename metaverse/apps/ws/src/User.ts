@@ -39,11 +39,14 @@ export class User {
                     const spaceId = parsedData.payload.spaceId;
                     const token = parsedData.payload.token;
                     const userId = (jwt.verify(token, JWT_SECRET) as JwtPayload).userId
+                    console.log("heelo1")
 
                     if (!userId) {
                         this.ws.close()
                         return
                     }
+                    console.log("heelo2")
+
 
                     this.userId = userId
 
@@ -52,16 +55,21 @@ export class User {
                             id: spaceId
                         }
                     })
+                    console.log("heelo3")
+
 
                     if (!space) {
                         this.ws.close();
                         return
                     }
                     this.spaceId = spaceId
+                    console.log("heelo4")
 
                     RoomManager.getInstance().adduser(spaceId, this);
                     this.x = Math.floor(Math.random() * space?.width);
                     this.y = Math.floor(Math.random() * space?.height);
+
+                    console.log("heelo5")
 
                     this.send({
                         type: "space-joined",
@@ -74,6 +82,9 @@ export class User {
                         }
                     })
 
+                    console.log("heelo6")
+
+
                     RoomManager.getInstance().broadcast({
                         type: "user-joined",
                         payload: {
@@ -82,6 +93,8 @@ export class User {
                             y: this.y
                         }
                     }, this, this.spaceId!);
+                    console.log("heelo7")
+
                     break;
                 case "move":
                     const moveX = parsedData.payload.x;
