@@ -1,5 +1,4 @@
-import WebSocket, { WebSocketServer } from 'ws';
-// const { WebSocketServer } = require('ws')
+import { WebSocketServer } from 'ws';
 import { User } from './User';
 
 const wss = new WebSocketServer({ port: 3001 });
@@ -12,6 +11,7 @@ wss.on('connection', function connection(ws: any) {
 
     // ws.on('message', function message(data) {
     //     console.log('received: %s', data);
+    
     // });
 
     // ws.send('something');

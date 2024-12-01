@@ -2,6 +2,7 @@ import React, { useEffect } from 'react'
 import Phaser from 'phaser'
 import phaserGameConfig from '../utils/phaser'
 import Websocket from 'ws'
+import { CreateAvatar } from '../components/CreateAvatar'
 
 export const Home = () => {
     // const game = new Phaser.Game(phaserGameConfig)
@@ -9,25 +10,25 @@ export const Home = () => {
 
     
 
-    useEffect(() => {
-        const ws = new WebSocket('ws://localhost:3001');
+    // useEffect(() => {
+    //     const ws = new WebSocket('ws://localhost:3001');
 
-        ws.onopen = () =>{
-            const data = {
-                "type": "join",
-                "payload": {
-                    "spaceId": "123",
-                    "token": localStorage.getItem('token')
-                }
-            }
-            ws.send(JSON.stringify(data))
-        }
+    //     ws.onopen = () =>{
+    //         const data = {
+    //             "type": "join",
+    //             "payload": {
+    //                 "spaceId": "123",
+    //                 "token": localStorage.getItem('token')
+    //             }
+    //         }
+    //         ws.send(JSON.stringify(data))
+    //     }
     
-        ws.onmessage =  (event) => {
-            console.log("Message from server",JSON.parse(event.data))
-        }
+    //     ws.onmessage =  (event) => {
+    //         console.log("Message from server",JSON.parse(event.data))
+    //     }
 
-    }, [])
+    // }, [])
 
     return (
         <div>
