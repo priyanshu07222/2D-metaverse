@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { createAvatarSchema, createElementSchema, createMapSchema, updateElementSchema } from "../types";
 import client from '@repo/db/client'
+import uploadToS3 from "../utils/uploadToS3";
 
 
 export const createElement = async (req: Request, res: Response) => {
@@ -47,11 +48,18 @@ export const updateElement = async (req: Request, res: Response) => {
 }
 
 export const createAvatar = async (req: Request, res: Response) => {
+
     const parsedData = createAvatarSchema.safeParse(req.body)
     if (!parsedData.success) {
         res.status(400).json({ message: "Validation failed" })
         return
     }
+
+    console.log('uploading s3')
+
+    await uploadToS3('avatarImage1', parsedData.data.imageUrl)
+
+    console.log("after s3 upload")
 
     const avatar = await client.avatar.create({
         data: {

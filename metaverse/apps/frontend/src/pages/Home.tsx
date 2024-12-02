@@ -32,6 +32,7 @@ export const Home = () => {
 
     return (
         <div>
+            <CreateAvatar/>
             <div className='py-4 h-[80vh] pt-56 bg-slate-100 '>
                 <div className='max-w-screen-2xl mx-auto flex justify-between'>
                     {/* left side */}
