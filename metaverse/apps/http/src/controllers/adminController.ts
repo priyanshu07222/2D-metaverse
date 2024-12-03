@@ -2,10 +2,10 @@ import { Request, Response } from "express";
 import { createAvatarSchema, createElementSchema, createMapSchema, updateElementSchema } from "../types";
 import client from '@repo/db/client'
 import uploadToS3 from "../utils/uploadToS3";
-
+import fs from 'fs'
+import path from "path";
 
 export const createElement = async (req: Request, res: Response) => {
-    // console.log("yes sir")
     const parsedData = createElementSchema.safeParse(req.body)
     if (!parsedData.success) {
         res.status(400).json({ message: "Validation failed" })
@@ -48,29 +48,43 @@ export const updateElement = async (req: Request, res: Response) => {
 }
 
 export const createAvatar = async (req: Request, res: Response) => {
-
-    const parsedData = createAvatarSchema.safeParse(req.body)
-    if (!parsedData.success) {
-        res.status(400).json({ message: "Validation failed" })
-        return
-    }
-
-    console.log('uploading s3')
-
-    await uploadToS3('avatarImage1', parsedData.data.imageUrl)
-
-    console.log("after s3 upload")
-
-    const avatar = await client.avatar.create({
-        data: {
-            name: parsedData.data.name,
-            imageUrl: parsedData.data.imageUrl
+    try {
+        const file = req.file
+        const parsedData = createAvatarSchema.safeParse(req.body)
+        if (!parsedData.success) {
+            res.status(400).json({ message: "Validation failed" })
+            return
         }
-    })
+        if (!file) {
+            res.status(400).json({ message: "File not found" })
+            return
+        }
+        const filePath = path.resolve(file.path);
+        const fileBuffer = fs.readFileSync(filePath);
+        const s3Key = `avatars/${file.originalname}`;
 
-    res.json({
-        avatarId: avatar.id
-    })
+        const s3Response = await uploadToS3(s3Key, fileBuffer);
+        console.log("after s3 upload");
+
+        fs.unlinkSync(filePath);
+
+        res.status(200).json({ message: "Avatar uploaded successfully", data: s3Response });
+
+
+        // const avatar = await client.avatar.create({
+        //     data: {
+        //         name: parsedData.data.name,
+        //         imageUrl: parsedData.data.imageUrl
+        //     }
+        // })
+
+        // res.json({
+        //     avatarId: avatar.id
+        // })
+    } catch (error: any) {
+        console.log(error)
+        res.status(400).json({ message: error.message })
+    }
 }
 
 export const createMap = async (req: Request, res: Response) => {
