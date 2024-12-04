@@ -1,20 +1,25 @@
 import { Router } from "express";
 import { adminMiddleware } from "../../middleware/admin";
 import multer from 'multer';
+import multerS3 from 'multer-s3'
+import s3Client from "../../utils/s3Connect";
 import { createAvatar, createElement, createMap, updateElement } from "../../controllers/adminController";
 
 export const adminRouter = Router()
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, 'uploads/');
-  },
-  filename: (req, file, cb) => {
-    cb(null, file.originalname);
-  }
-});
 
-// Create the multer instance
-const upload = multer({ storage: storage });
+
+const upload = multer({
+  storage: multerS3({
+    s3: s3Client,
+    bucket: process.env.AWS_BUCKET_NAME!,
+    metadata: function (req, file, cb) {
+      cb(null, { fieldName: file.fieldname })
+    },
+    key: function (req, file, cb) {
+      cb(null, `avatars/${Date.now().toString()}`)
+    }
+  })
+})
 
 
 adminRouter.use(adminMiddleware)

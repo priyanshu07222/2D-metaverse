@@ -1,9 +1,13 @@
 import { Request, Response } from "express";
 import { createAvatarSchema, createElementSchema, createMapSchema, updateElementSchema } from "../types";
 import client from '@repo/db/client'
-import uploadToS3 from "../utils/uploadToS3";
 import fs from 'fs'
 import path from "path";
+
+interface S3File extends Express.Multer.File {
+    key: string;
+    location?: string;
+}
 
 export const createElement = async (req: Request, res: Response) => {
     const parsedData = createElementSchema.safeParse(req.body)
@@ -47,9 +51,10 @@ export const updateElement = async (req: Request, res: Response) => {
     })
 }
 
+
 export const createAvatar = async (req: Request, res: Response) => {
     try {
-        const file = req.file
+        const file = req.file as S3File
         const parsedData = createAvatarSchema.safeParse(req.body)
         if (!parsedData.success) {
             res.status(400).json({ message: "Validation failed" })
@@ -59,28 +64,19 @@ export const createAvatar = async (req: Request, res: Response) => {
             res.status(400).json({ message: "File not found" })
             return
         }
-        const filePath = path.resolve(file.path);
-        const fileBuffer = fs.readFileSync(filePath);
-        const s3Key = `avatars/${file.originalname}`;
 
-        const s3Response = await uploadToS3(s3Key, fileBuffer);
-        console.log("after s3 upload");
+        const imageUrl = file.location
 
-        fs.unlinkSync(filePath);
+        const avatar = await client.avatar.create({
+            data: {
+                name: parsedData.data.name,
+                imageUrl
+            }
+        })
 
-        res.status(200).json({ message: "Avatar uploaded successfully", data: s3Response });
-
-
-        // const avatar = await client.avatar.create({
-        //     data: {
-        //         name: parsedData.data.name,
-        //         imageUrl: parsedData.data.imageUrl
-        //     }
-        // })
-
-        // res.json({
-        //     avatarId: avatar.id
-        // })
+        res.json({
+            avatarId: avatar.id
+        })
     } catch (error: any) {
         console.log(error)
         res.status(400).json({ message: error.message })

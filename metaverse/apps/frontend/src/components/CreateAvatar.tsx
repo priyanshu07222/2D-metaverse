@@ -9,7 +9,7 @@ export const CreateAvatar = () => {
 
     const createAvatarHandler = async () => {
         const name = nameRef.current?.value;
-        const file = imageUrlRef.current?.files?.[0]; // Access the file
+        const file = imageUrlRef.current?.files?.[0]; 
 
         if (!name || !file) {
             console.error("Name or file is missing");
@@ -19,7 +19,7 @@ export const CreateAvatar = () => {
         console.log("Name:", name, "File:", file);
 
         const formData = new FormData();
-        formData.append("file", file); 
+        formData.append("file", file);
         formData.append("name", name);
 
         try {
@@ -36,9 +36,8 @@ export const CreateAvatar = () => {
 
             console.log("Avatar ID:", response.data.avatarId);
 
-            // Clear inputs
             nameRef.current.value = "";
-            imageUrlRef.current.value = ""; // This works as React abstracts it, but browser compatibility may vary
+            imageUrlRef.current.value = ""; 
         } catch (error) {
             console.error("Error creating avatar:", error);
         }
@@ -48,21 +47,18 @@ export const CreateAvatar = () => {
         <div>
             <p className="text-3xl font-bold text-gray-700">Create an Avatar</p>
             <div className="flex flex-col gap-4 w-72">
-                {/* Name input */}
                 <input
                     className="p-2 border border-gray-400 rounded-lg outline-none"
                     ref={nameRef}
                     type="text"
                     placeholder="Avatar Name"
                 />
-                {/* File input */}
                 <input
                     className="p-2 border border-gray-400 rounded-lg outline-none"
                     ref={imageUrlRef}
                     type="file"
                     accept="image/*"
                 />
-                {/* Button */}
                 <button
                     className="px-4 py-2 rounded-lg text-white font-semibold bg-black"
                     onClick={createAvatarHandler}
