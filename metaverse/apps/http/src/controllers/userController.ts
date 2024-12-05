@@ -6,20 +6,25 @@ import jwt from 'jsonwebtoken'
 import { JWT_SECRET } from "../config";
 
 export const signup = async (req: Request, res: Response): Promise<any> => {
-    const parsedData = await signupSchema.safeParse(req.body)
+    const parsedData = signupSchema.safeParse(req.body)
 
     if (!parsedData.success) {
         return res.status(400).json({ message: "Validation failed" })
     }
+    console.log("singup 1")
 
     const hashedPassword = await bcrypt.hash(parsedData.data.password, 10)
 
     try {
+        console.log("singup 1.1")
+
         const userAlreadyExist = await client.user.findFirst({
             where: {
                 username: parsedData.data.username
             }
         })
+        console.log("singup 2")
+
 
         if (userAlreadyExist) {
             res.status(400).json({ message: "user already exist" })
@@ -33,6 +38,7 @@ export const signup = async (req: Request, res: Response): Promise<any> => {
                 role: parsedData.data.type === "admin" ? "Admin" : "User"
             }
         })
+        console.log("singup 3")
 
         res.json({
             userId: user.id
@@ -79,11 +85,12 @@ export const signin = async (req: Request, res: Response): Promise<any> => {
 
         const token = jwt.sign({
             userId: user.id,
-            role: user.role
+            role: user.role,
         }, JWT_SECRET)
 
         res.json({
-            token
+            token,
+
         })
     } catch (error) {
         res.status(400).json({

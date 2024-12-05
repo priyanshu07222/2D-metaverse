@@ -16,8 +16,6 @@ export const CreateAvatar = () => {
             return;
         }
 
-        console.log("Name:", name, "File:", file);
-
         const formData = new FormData();
         formData.append("file", file);
         formData.append("name", name);
