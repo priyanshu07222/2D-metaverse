@@ -5,6 +5,7 @@ import { Layout } from './Layout'
 import { Signin } from './pages/Signin'
 import { Home } from './pages/Home'
 import { UserInfo } from './pages/UserInfo'
+import { Spaces } from './pages/Spaces'
 function App() {
   // const config = {
   //   type: Phaser.AUTO,
@@ -27,6 +28,7 @@ function App() {
         <Route path='signup' element={<Signup />} />
         <Route path='signin' element={<Signin />} />
         <Route path='user-info' element={<UserInfo/>}/>
+        <Route path='spaces' element={<Spaces/>} />
       </Route>
     )
   )
