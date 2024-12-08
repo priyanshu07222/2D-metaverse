@@ -1,6 +1,18 @@
-import React from 'react'
+import axios from 'axios';
+import React, { useEffect, useState } from 'react'
 
 export const Spaces = () => {
+  const [spaceName, setSpaceName] = useState();
+  const [getAllSpace, setGetAllSpace] = useState()
+
+  useEffect(()=>{
+    (async function getAllSpace(){
+      const response = await axios.get('http:localhost:3000/api/v1/space/all', {headers:{
+        authorization: `Bearer ${localStorage.getItem('token')}`
+      }})
+    })()
+  },[])
+  
   return (
     <div className='max-w-screen-lg mx-auto py-24'>
       <div className='flex justify-between items-center mb-4'>
