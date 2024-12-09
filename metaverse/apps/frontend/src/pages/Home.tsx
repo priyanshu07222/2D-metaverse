@@ -3,9 +3,10 @@ import Phaser from 'phaser'
 import phaserGameConfig from '../utils/phaser'
 import Websocket from 'ws'
 import { CreateAvatar } from '../components/CreateAvatar'
+import { CreateElement } from '../components/CreateElement'
 
 export const Home = () => {
-    // const game = new Phaser.Game(phaserGameConfig)
+
 
 
 
@@ -33,6 +34,7 @@ export const Home = () => {
     return (
         <div>
             {/* <CreateAvatar/> */}
+            <CreateElement/>
             <div className='py-4 h-[80vh] pt-56 bg-slate-100 '>
                 <div className='max-w-screen-2xl mx-auto flex justify-between items-center'>
                     {/* left side */}
