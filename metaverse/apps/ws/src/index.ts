@@ -9,13 +9,6 @@ wss.on('connection', function connection(ws: any) {
     console.log("yser connected1")
     ws.on('error', console.error);
 
-    // ws.on('message', function message(data) {
-    //     console.log('received: %s', data);
-    
-    // });
-
-    // ws.send('something');
-
     ws.on('close', () => {
         user.destroy();
     })
