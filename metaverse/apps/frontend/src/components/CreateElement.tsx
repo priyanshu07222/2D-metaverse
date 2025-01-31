@@ -2,33 +2,53 @@ import axios from 'axios'
 import React, { useRef, useState } from 'react'
 
 export const CreateElement = () => {
-    const imageUrlRef = useRef<HTMLInputElement>(null);
+    // const imageUrlRef = useRef<HTMLInputElement>(null);
+    const [imageUrl, setImageUrl] = useState('')
     const [width, setWidth] = useState<number>(0);
     const [height, setHeight] = useState<number>(0);
     const [isStatic, setIsStatic] = useState(false);
     const [elementId, setElementId] = useState('')
 
-    const file = new FormData()
+    // const file = new FormData()
     // need to work on this
-    // file.append('file', imageUrlRef?.current?.files.[0])
     const createElement = async () => {
-        const response = await axios.post('http://localhost:3000/api/v1/admin/element', { file, width, height, isStatic }, {
+
+        // event.preventDefault();
+
+        // if (imageUrlRef.current && imageUrlRef.current.files && imageUrlRef.current.files[0]) {
+        //     const file = imageUrlRef.current.files[0];
+        //     console.log('Selected file:', file);
+
+        //     // If you want to append the file to a FormData object
+        //     const formData = new FormData();
+        //     formData.append('file', file);
+        //     console.log('File from FormData:', formData.get('file'));
+
+        //     // You can now send `formData` to your server or handle it as needed
+        //     // Example: axios.post('/upload', formData);
+        // } else {
+        //     console.log('No file selected');
+        // }
+        // imageUrlRef && file.append('file', imageUrlRef?.current?.files.[0])
+        console.log(imageUrl, "nice to have", )
+        console.log("once", localStorage.getItem("token"))
+        const response = await axios.post('http://localhost:3000/api/v1/admin/element', { imageUrl, width, height, static:isStatic }, {
             headers: {
                 authorization: `Bearer ${localStorage.getItem("token")}`
             }
         })
     }
 
-    console.log("isCHecke check", isStatic)
+    // console.log("isCHecke check", isStatic)
 
-    const updateElement = async () => {
-        const response = await axios.put(`http://localhost:3000/api/v1/admin/element/:${elementId}`)
-    }
+    // const updateElement = async () => {
+    //     const response = await axios.put(`http://localhost:3000/api/v1/admin/element/:${elementId}`, {file})
+    // }
     return (
         <div className=''>
             <div>
                 <h3 className='font-semibold text-xl text-gray-700'>Create Element</h3>
-                <input type="file" className='py-2 file:p-2 file:text-black text-black overflow-x-sc' ref={imageUrlRef} />
+                <input type="input" className='py-2 file:p-2 file:text-black text-black overflow-x-sc' onChange={(e)=>setImageUrl(e.target.value)} />
                 <div className='flex gap-2 items-center'>
                     <p className='text-gray-700 font-semibold'>Size(%)</p>
                     <div className='flex gap-2 my-2 items-center'>
@@ -48,8 +68,9 @@ export const CreateElement = () => {
                     </div>
                 </div>
 
-                <button className='px-4 py-2 rounded-lg text-white font-semibold bg-black'>Create element</button>
+                <button className='px-4 py-2 rounded-lg text-white font-semibold bg-black' onClick={createElement}>Create element</button>
             </div>
+            <button onClick={createElement}>hello</button>
         </div>
     )
 }

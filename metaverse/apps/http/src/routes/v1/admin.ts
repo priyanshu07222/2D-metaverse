@@ -8,18 +8,18 @@ import { createAvatar, createElement, createMap, updateElement } from "../../con
 export const adminRouter = Router()
 
 
-const upload = multer({
-  storage: multerS3({
-    s3: s3Client,
-    bucket: process.env.AWS_BUCKET_NAME!,
-    metadata: function (req, file, cb) {
-      cb(null, { fieldName: file.fieldname })
-    },
-    key: function (req, file, cb) {
-      cb(null, `avatars/${Date.now().toString()}`)
-    }
-  })
-})
+// const upload = multer({
+//   storage: multerS3({
+//     s3: s3Client,
+//     bucket: process.env.AWS_BUCKET_NAME!,
+//     metadata: function (req, file, cb) {
+//       cb(null, { fieldName: file.fieldname })
+//     },
+//     key: function (req, file, cb) {
+//       cb(null, `avatars/${Date.now().toString()}`)
+//     }
+//   })
+// })
 
 
 adminRouter.use(adminMiddleware)
@@ -28,6 +28,8 @@ adminRouter.post('/element', createElement)
 
 adminRouter.put('/element/:elementId', updateElement)
 
-adminRouter.post('/avatar', upload.single('file'), createAvatar)
+// adminRouter.post('/avatar', upload.single('file'), createAvatar)
+adminRouter.post('/avatar', createAvatar)
+
 
 adminRouter.post('/map', createMap)

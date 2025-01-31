@@ -10,11 +10,13 @@ interface S3File extends Express.Multer.File {
 }
 
 export const createElement = async (req: Request, res: Response) => {
+    console.log(req.body, "heelo1")
     const parsedData = createElementSchema.safeParse(req.body)
     if (!parsedData.success) {
         res.status(400).json({ message: "Validation failed" })
         return
     }
+    console.log(req.body, "heelo2")
 
     const element = await client.element.create({
         data: {
@@ -54,23 +56,24 @@ export const updateElement = async (req: Request, res: Response) => {
 
 export const createAvatar = async (req: Request, res: Response) => {
     try {
-        const file = req.file as S3File
+        // const file = req.file as S3File
+        // console.log("file1", file)
         const parsedData = createAvatarSchema.safeParse(req.body)
         if (!parsedData.success) {
             res.status(400).json({ message: "Validation failed" })
             return
         }
-        if (!file) {
-            res.status(400).json({ message: "File not found" })
-            return
-        }
+        // if (!file) {
+        //     res.status(400).json({ message: "File not found" })
+        //     return
+        // }
 
-        const imageUrl = file.location
+        // const imageUrl = file.location
 
         const avatar = await client.avatar.create({
             data: {
                 name: parsedData.data.name,
-                imageUrl
+                imageUrl: parsedData.data.imageUrl
             }
         })
 

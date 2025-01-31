@@ -4,6 +4,9 @@ import { LuLayers2 } from "react-icons/lu";
 import { CreateElement } from '../components/CreateElement';
 import { PiWallThin } from 'react-icons/pi';
 import { TbMoodBoy } from 'react-icons/tb';
+import { CreateAvatar } from '../components/CreateAvatar';
+import { GetElement } from '../components/GetElement';
+import { GetAvatar } from '../components/GetAvatar';
 
 export const MapEditor = () => {
   const gridRef = useRef(null);
@@ -27,8 +30,8 @@ export const MapEditor = () => {
 
     function preloadGrid() {
       this.load.spritesheet('tiles', 'assets/Little_Bits_Office_Floors.png', {
-        frameWidth: 16, 
-        frameHeight: 16, 
+        frameWidth: 16,
+        frameHeight: 16,
       });
 
     }
@@ -85,7 +88,7 @@ export const MapEditor = () => {
       },
     };
 
-    const tileSelectorGame = new Phaser.Game(tileSelectorConfig);
+    // const tileSelectorGame = new Phaser.Game(tileSelectorConfig);
 
     function preloadTileSelector() {
       // Load the tileset image
@@ -139,13 +142,16 @@ export const MapEditor = () => {
 
     return () => {
       gridGame.destroy(true);
-      tileSelectorGame.destroy(true);
+      // tileSelectorGame.destroy(true);
     };
   }, [selectedTileIndex]);
 
 
   return (
     <div>
+      <h1>hello</h1>
+      {/* <GetElement/> */}
+      <GetAvatar />
       <div className='flex gap-8'>
         <div className='flex flex-col items-center p-2 hover:bg-gray-700 hover:text-white cursor-pointer '>
           <LuLayers2 size={25} />
@@ -186,6 +192,7 @@ export const MapEditor = () => {
             ref={tileSelectorRef}
 
           ></div>
+          <CreateAvatar />
         </div>
       </div>
     </div>

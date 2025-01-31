@@ -46,7 +46,7 @@ export const updateElementSchema = z.object({
 
 export const createAvatarSchema = z.object({
     name: z.string(),
-    // imageUrl: z.string(),
+    imageUrl: z.string(),
 })
 
 export const createMapSchema = z.object({
